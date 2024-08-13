@@ -45,36 +45,62 @@ typingText.addEventListener("click",()=>{
 }
 
 //handle user input
-function initTyping(){
-    const char= typingText.querySelectorAll('span');
-    const typedChar=input.value.charAt(charIndex);
-    if(charIndex < char.length && timeleft > 0){
+function initTyping() {
+    const chars = typingText.querySelectorAll('span');
+    const typedChar = input.value.charAt(charIndex);
 
-        if(!istyping){
-            timer=setInterval(initTime,1000);
-            istyping=true;
-        }  
+    // Check for backspace key press
+    if (event.inputType === 'deleteContentBackward') {
+        if (charIndex > 0) {
+            charIndex--;
+            const lastChar = chars[charIndex];
 
+            // Remove correct/incorrect classes
+            lastChar.classList.remove('correct', 'incorrect');
 
-        if(char[charIndex].innerText === typedChar){
-            char[charIndex].classList.add('correct');
+            // Decrease mistake count if the character was incorrect
+            if (lastChar.classList.contains('incorrect')) {
+                mistake--;
+            }
+
+            // Update stats and move active class back
+            mistakes.innerText = mistake;
+            cpm.innerText = charIndex - mistake;
+            chars.forEach(span => span.classList.remove('active'));
+            chars[charIndex].classList.add('active');
         }
-        else{
-            mistake++;
-            char[charIndex].classList.add('incorrect');
+    } else {
+        // Handle normal typing
+        if (charIndex < chars.length && timeleft > 0) {
+            if (!istyping) {
+                timer = setInterval(initTime, 1000);
+                istyping = true;
+            }
 
+            // Ensure that only one active character is highlighted
+            chars.forEach(span => span.classList.remove('active'));
+
+            if (chars[charIndex].innerText === typedChar) {
+                chars[charIndex].classList.add('correct');
+            } else {
+                mistake++;
+                chars[charIndex].classList.add('incorrect');
+            }
+
+            charIndex++;
+            if (charIndex < chars.length) {  // Ensure we don't exceed the character length
+                chars[charIndex].classList.add('active');
+            }
+
+            mistakes.innerText = mistake;
+            cpm.innerText = charIndex - mistake;
+        } else {
+            clearInterval(timer);
+            input.value = '';
         }
-        charIndex++;
-        char[charIndex].classList.add('active');
-        mistakes.innerText = mistake;
-        cpm.innerText= charIndex-mistake;
     }
-    else{
-      clearInterval(timer);
-       input.value='';
-    }
-   
 }
+
 
 function initTime(){
     if(timeleft>0){
