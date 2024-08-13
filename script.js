@@ -55,16 +55,16 @@ function initTyping() {
             charIndex--;
             const lastChar = chars[charIndex];
 
-            // Remove correct/incorrect classes
-            lastChar.classList.remove('correct', 'incorrect');
-
             // Decrease mistake count if the character was incorrect
             if (lastChar.classList.contains('incorrect')) {
                 mistake--;
+                mistakes.innerText = mistake;
             }
 
-            // Update stats and move active class back
-            mistakes.innerText = mistake;
+            // Remove the correct/incorrect classes
+            lastChar.classList.remove('correct', 'incorrect');
+
+            // Update CPM and highlight the current character
             cpm.innerText = charIndex - mistake;
             chars.forEach(span => span.classList.remove('active'));
             chars[charIndex].classList.add('active');
@@ -85,6 +85,7 @@ function initTyping() {
             } else {
                 mistake++;
                 chars[charIndex].classList.add('incorrect');
+                mistakes.innerText = mistake;
             }
 
             charIndex++;
@@ -92,7 +93,7 @@ function initTyping() {
                 chars[charIndex].classList.add('active');
             }
 
-            mistakes.innerText = mistake;
+            // Update CPM
             cpm.innerText = charIndex - mistake;
         } else {
             clearInterval(timer);
@@ -100,6 +101,7 @@ function initTyping() {
         }
     }
 }
+
 
 
 function initTime(){
