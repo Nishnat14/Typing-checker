@@ -39,4 +39,4 @@ A typing speed game designed to test and improve typing skills. This project fea
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/typing-game.git
+   git clone https://github.com/Nishnat14/Typing-checker.git
